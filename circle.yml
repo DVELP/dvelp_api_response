@@ -1,3 +1,7 @@
+database:
+  override:
+    - echo "no database setup"
+
 test:
   post:
     - bundle exec rubocop
