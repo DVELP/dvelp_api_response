@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 ENV['RAILS_ENV'] ||= 'test'
+ENV['DVELP_API_AUTH_SECRET_KEY'] = ''
+
+require 'kaminari'
 
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'dvelp_api_response'
@@ -10,14 +13,22 @@ Combustion.initialize! :all
 
 require 'byebug'
 require 'database_cleaner'
-require 'rspec/rails'
+require 'dvelp_api_auth'
 require 'faker'
 require 'factory_girl_rails'
+require 'rspec/rails'
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
+# Load translations to use in specs
+I18n.backend.store_translations(
+  :en,
+  YAML.load_file(File.open('./config/locales/en.yml'))['en']
+)
+
 RSpec.configure do |config|
+  config.include ApiRequestHelper, type: :controller
   config.use_transactional_fixtures = true
   config.include FactoryGirl::Syntax::Methods
 
