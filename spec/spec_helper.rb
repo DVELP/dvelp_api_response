@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 ENV['RAILS_ENV'] ||= 'test'
+ENV['DVELP_API_AUTH_SECRET_KEY'] = ''
 
 require 'kaminari'
 
@@ -12,14 +13,16 @@ Combustion.initialize! :all
 
 require 'byebug'
 require 'database_cleaner'
-require 'rspec/rails'
+require 'dvelp_api_auth'
 require 'faker'
 require 'factory_girl_rails'
+require 'rspec/rails'
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
+  config.include ApiRequestHelper, type: :controller
   config.use_transactional_fixtures = true
   config.include FactoryGirl::Syntax::Methods
 

@@ -7,6 +7,10 @@ AllCops:
     - 'vendor/**/*'
   TargetRubyVersion: 2.3
 
+Metrics/AbcSize:
+  Exclude:
+    - 'lib/dvelp_api_response/handle_request.rb'
+
 Metrics/BlockLength:
   Exclude:
     - 'dvelp_api_response.gemspec'
