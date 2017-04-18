@@ -1,0 +1,13 @@
+en:
+  render_errors:
+    destruction: 'Failed to delete the resource'
+    internal_server: 'Internal Server Error'
+    media:
+      unsupported: 'Unsupported media type'
+      unacceptable: 'Unacceptable media type'
+    missing_param: 'Missing parameter: %{param}'
+    not_found: '%{resource} not found'
+    paginated: 'Object must be paginated'
+    type: "Incorrect type, expected type is %{type}"
+    unauthorized: 'Unauthorized'
+    unexpected_token: 'unexpected token at'

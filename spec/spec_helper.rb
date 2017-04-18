@@ -21,6 +21,12 @@ require 'rspec/rails'
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
+# Load translations to use in specs
+I18n.backend.store_translations(
+  :en,
+  YAML.load_file(File.open('./config/locales/en.yml'))['en']
+)
+
 RSpec.configure do |config|
   config.include ApiRequestHelper, type: :controller
   config.use_transactional_fixtures = true
