@@ -11,12 +11,15 @@ Combustion.initialize! :all
 require 'byebug'
 require 'database_cleaner'
 require 'rspec/rails'
+require 'faker'
+require 'factory_girl_rails'
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
+  config.include FactoryGirl::Syntax::Methods
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
