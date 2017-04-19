@@ -6,6 +6,7 @@
 /coverage/
 /doc/
 /pkg/
+/spec/internal/db/combustion_test.sqlite
 /spec/reports/
 /tmp/
 
