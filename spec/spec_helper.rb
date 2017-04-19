@@ -2,6 +2,8 @@
 
 ENV['RAILS_ENV'] ||= 'test'
 
+require 'kaminari'
+
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'dvelp_api_response'
 

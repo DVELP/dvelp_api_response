@@ -17,6 +17,7 @@ module DvelpApiResponse
     def build_response
       return nil unless resource_is_valid?
       hash = {}.merge(Hash[resource_class_as_sym, response_hash])
+      hash.merge!(pagination) if paginated?
       hash
     end
 
@@ -66,6 +67,16 @@ module DvelpApiResponse
       api_response_class.new(
         resource, version, parsed_includes, options: options
       ).as_hash
+    end
+
+    def paginated?
+      collection? &&
+        resource.respond_to?(:total_pages) &&
+        resource.total_pages.positive?
+    end
+
+    def pagination
+      DvelpApiResponse::Pagination.new(resource).as_hash
     end
 
     def parsed_includes

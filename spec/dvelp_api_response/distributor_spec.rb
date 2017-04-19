@@ -30,6 +30,15 @@ RSpec.describe DvelpApiResponse::Distributor do
         expect(object.build_response).to be_nil
       end
     end
+
+    context 'resource is paginated' do
+      it 'returns pagination hash' do
+        create(:test_record)
+        object = DvelpApiResponse::Distributor.new(TestRecord.page, VERSION, [])
+
+        expect(object.build_response).to have_key(:pagination)
+      end
+    end
   end
 
   describe '#resource_is_valid?' do
@@ -184,6 +193,49 @@ RSpec.describe DvelpApiResponse::Distributor do
       object = DvelpApiResponse::Distributor.new(resource, VERSION, [])
 
       expect(object.singular_response).to be_a(Hash)
+    end
+  end
+
+  describe '#paginated?' do
+    context 'resource is a collection' do
+      context 'it is not paginated' do
+        it 'returns true' do
+          resource = build_list(:test_record, 2)
+
+          object = DvelpApiResponse::Distributor.new(resource, VERSION, [])
+
+          expect(object.paginated?).to be_falsey
+        end
+      end
+
+      context 'it is paginated' do
+        it 'returns true' do
+          create(:test_record)
+
+          object = DvelpApiResponse::Distributor
+            .new(TestRecord.page, VERSION, [])
+
+          expect(object.paginated?).to be_truthy
+        end
+      end
+    end
+
+    context 'resource is not a collection' do
+      it 'returns false' do
+        resource = build(:test_record)
+
+        object = DvelpApiResponse::Distributor.new(resource, VERSION, [])
+
+        expect(object.paginated?).to be_falsey
+      end
+    end
+  end
+
+  describe '#pagination' do
+    it 'create a new DvelpApiResponse::Pagination object' do
+      object = DvelpApiResponse::Distributor.new(TestRecord.page, VERSION, [])
+
+      expect(object.pagination).to have_key(:pagination)
     end
   end
 
