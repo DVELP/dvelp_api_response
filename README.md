@@ -20,7 +20,9 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+You will need to set an env variable to encrypt requests:
+
+ENV['DVELP_API_AUTH_SECRET_KEY'] = 'Some key'
 
 ## Development
 

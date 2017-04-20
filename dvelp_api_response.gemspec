@@ -12,6 +12,8 @@ Gem::Specification.new do |spec|
   spec.email         = ['richard@dvelp.co.uk']
 
   spec.summary       = 'Provides standardised response to api requests.'
+  spec.homepage      = 'http://dvelp.co.uk'
+  spec.license       = 'MIT'
 
   if spec.respond_to?(:metadata)
     spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
