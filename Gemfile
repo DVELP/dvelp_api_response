@@ -2,5 +2,7 @@
 
 source 'https://rubygems.org'
 
+gem 'dvelp_api_auth', git: 'https://github.com/DVELP/dvelp_api_auth'
+
 # Specify your gem's dependencies in dvelp_api_response.gemspec
 gemspec
