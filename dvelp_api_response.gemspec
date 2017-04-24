@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'dvelp_api_auth'
   spec.add_dependency 'kaminari'
   spec.add_dependency 'rails'
+  spec.add_dependency 'active_model_serializers'
 
   spec.add_development_dependency 'bundler', '~> 1.14'
   spec.add_development_dependency 'byebug'

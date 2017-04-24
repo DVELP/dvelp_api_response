@@ -11,6 +11,7 @@ require 'dvelp_api_response'
 require 'combustion'
 Combustion.initialize! :all
 
+require 'active_model_serializers'
 require 'byebug'
 require 'database_cleaner'
 require 'dvelp_api_auth'

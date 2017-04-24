@@ -5,6 +5,10 @@ require 'spec_helper'
 RSpec.describe TestController, type: :controller do
   describe 'API infrastructure' do
     controller(TestController) do
+      def create
+        build_response(parsed_params.slice('email'), :ok)
+      end
+
       def index
         build_response({}, :ok)
       end
@@ -238,6 +242,74 @@ RSpec.describe TestController, type: :controller do
 
         expect(parsed_response)
           .to eq(response_error('Unacceptable media type'))
+      end
+    end
+
+    describe 'params' do
+      context 'when multipart' do
+        it 'returns parsed params' do
+          attributes = {
+            avatar: Rack::Test::UploadedFile.new(
+              File.open(
+                Rails.root.join('fixtures', 'images', 'test.jpg')
+              )
+            ),
+            email: 'richard@dvelp.co.uk'
+          }
+
+          payload = {
+            data: {
+              type: 'test',
+              attributes: attributes
+            }
+          }
+
+          fill_auth_headers(
+            fullpath: '/test.jsonapi',
+            multipart: true,
+            body: build_multipart(payload)
+          )
+
+          api_request :post, :create, params: payload
+
+          expected_response = {
+            'email' => 'richard@dvelp.co.uk'
+          }
+
+          expect(response).to have_http_status :ok
+
+          expect(parsed_response).to eq expected_response
+        end
+      end
+
+      context 'when json' do
+        it 'returns parsed params' do
+          customer_attributes = {
+            email: 'richard@dvelp.co.uk'
+          }
+
+          payload = {
+            data: {
+              type: 'test',
+              attributes: customer_attributes
+            }
+          }
+
+          fill_auth_headers(
+            fullpath: '/test.jsonapi',
+            raw_post: payload.to_json
+          )
+
+          api_request :post, :create, payload: payload
+
+          expected_response = {
+            'email' => 'richard@dvelp.co.uk'
+          }
+
+          expect(response).to have_http_status :ok
+
+          expect(parsed_response).to eq expected_response
+        end
       end
     end
   end

@@ -46,5 +46,21 @@ module DvelpApiResponse
       raise UnacceptableMediaType unless valid_response_media_type?
       raise ResourceTypeConflict unless valid_resource_type?
     end
+
+    private
+
+    def multipart_request?
+      request.content_type == 'multipart/form-data'
+    end
+
+    def parsed_params
+      if multipart_request?
+        api_params[:data][:attributes]
+      else
+        ActionController::Parameters.new(
+          ActiveModelSerializers::Deserialization.jsonapi_parse(api_params)
+        )
+      end
+    end
   end
 end

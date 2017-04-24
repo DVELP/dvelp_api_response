@@ -12,20 +12,30 @@ module DvelpApiResponse
     def valid_request_media_type?
       return true if request.delete? || request.get?
 
-      request.content_type == Mime[:jsonapi]
+      valid_content_types.include? request.content_type
     end
 
     def valid_response_media_type?
       request.accepts.any? do |media_type|
-        media_type == Mime[:jsonapi]
+        valid_content_types.include? media_type
       end
     end
 
     def api_params
       @api_params ||=
-        ActionController::Parameters.new(
-          JSON.parse(request.body.read)
-        )
+        if multipart_request?
+          params
+        else
+          ActionController::Parameters.new(
+            JSON.parse(request.body.read)
+          )
+        end
+    end
+
+    private
+
+    def valid_content_types
+      [Mime[:jsonapi], 'multipart/form-data']
     end
   end
 end
