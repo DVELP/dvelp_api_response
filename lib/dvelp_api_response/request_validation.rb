@@ -35,7 +35,7 @@ module DvelpApiResponse
     private
 
     def valid_content_types
-      [Mime[:jsonapi], 'multipart/form-data']
+      [Mime[:json].to_s, Mime[:jsonapi].to_s, 'multipart/form-data']
     end
   end
 end
