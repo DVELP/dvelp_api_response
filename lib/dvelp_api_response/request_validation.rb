@@ -3,6 +3,7 @@
 module DvelpApiResponse
   module RequestValidation
     def valid_resource_type?
+      return true if action_name == 'raise_not_found!'
       return true if request.delete? || request.get?
 
       type = api_params.require(:data).require(:type)

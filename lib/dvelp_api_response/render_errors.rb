@@ -73,6 +73,15 @@ module DvelpApiResponse
       build_response(response_data, :unauthorized)
     end
 
+    def render_routing_error(path)
+      response_data = {
+        errors: [{
+          body: t('render_errors.routing', path: path)
+        }]
+      }
+      build_response(response_data, :not_found)
+    end
+
     def render_unacceptable_media_type_error
       response_data = {
         errors: [{

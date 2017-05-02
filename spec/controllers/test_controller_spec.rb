@@ -38,6 +38,10 @@ RSpec.describe TestController, type: :controller do
         raise ActiveRecord::RecordNotDestroyed.new(nil, test_record)
       end
 
+      def error_routing
+        raise_not_found!
+      end
+
       def error_type_conflict
         raise RequestTypeConflict
       end
@@ -59,6 +63,7 @@ RSpec.describe TestController, type: :controller do
             get :error_json
             get :error_missing_parameters
             get :error_not_found
+            get :error_routing
             get :error_validation
             post :error_type_conflict
           end
@@ -216,6 +221,23 @@ RSpec.describe TestController, type: :controller do
 
         expect(parsed_response['errors'][0]['body'])
           .to include('unexpected token at')
+      end
+    end
+
+    describe 'routing error handling' do
+      it 'renders error' do
+        fill_auth_headers(fullpath: '/test/error_routing.jsonapi')
+
+        api_request(
+          :get,
+          :error_routing,
+          params: { unmatched_route: '/test/error_routing' }
+        )
+
+        expect(response).to have_http_status :not_found
+
+        expect(parsed_response)
+          .to eq(response_error('No route matches /test/error_routing'))
       end
     end
 

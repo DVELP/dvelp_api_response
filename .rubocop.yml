@@ -16,6 +16,10 @@ Metrics/BlockLength:
     - 'dvelp_api_response.gemspec'
     - 'spec/**/*'
 
+Metrics/ModuleLength:
+  Exclude:
+    - 'lib/dvelp_api_response/render_errors.rb'
+
 Metrics/LineLength:
   Max: 80
 

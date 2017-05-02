@@ -8,6 +8,7 @@ en:
     missing_param: 'Missing parameter: %{param}'
     not_found: '%{resource} not found'
     paginated: 'Object must be paginated'
+    routing: 'No route matches %{path}'
     type: "Incorrect type, expected type is %{type}"
     unauthorized: 'Unauthorized'
     unexpected_token: 'unexpected token at'
