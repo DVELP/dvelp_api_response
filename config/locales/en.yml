@@ -8,6 +8,7 @@ en:
     missing_param: 'Missing parameter: %{param}'
     not_found: '%{resource} not found'
     paginated: 'Object must be paginated'
+    payment_api: 'Payment error: %{error}'
     routing: 'No route matches %{path}'
     type: "Incorrect type, expected type is %{type}"
     unauthorized: 'Unauthorized'

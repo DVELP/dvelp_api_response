@@ -34,6 +34,8 @@ module DvelpApiResponse
       render_missing_parameter_error(e.param)
     rescue JSON::ParserError => e
       render_malformed_request_error(e)
+    rescue PaymentAPIError => e
+      render_payment_api_error(e)
     rescue APIError => e
       render_api_error(e)
     end

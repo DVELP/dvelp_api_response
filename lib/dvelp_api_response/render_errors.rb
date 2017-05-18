@@ -73,6 +73,15 @@ module DvelpApiResponse
       build_response(response_data, :unauthorized)
     end
 
+    def render_payment_api_error(error)
+      response_data = {
+        errors: [{
+          body: t('render_errors.payment_api', error: error.message)
+        }]
+      }
+      build_response(response_data, :payment_required)
+    end
+
     def render_routing_error(path)
       response_data = {
         errors: [{
