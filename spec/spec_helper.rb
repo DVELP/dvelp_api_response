@@ -29,7 +29,7 @@ I18n.backend.store_translations(
 )
 
 RSpec.configure do |config|
-  config.include ApiRequestHelper, type: :controller
+  config.include DvelpApiResponse::ApiRequestHelper, type: :controller
   config.use_transactional_fixtures = true
   config.include FactoryGirl::Syntax::Methods
 
