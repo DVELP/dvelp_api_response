@@ -16,7 +16,7 @@ require 'byebug'
 require 'database_cleaner'
 require 'dvelp_api_auth'
 require 'faker'
-require 'factory_girl_rails'
+require 'factory_bot_rails'
 require 'rspec/rails'
 
 # Load support files
@@ -31,7 +31,7 @@ I18n.backend.store_translations(
 RSpec.configure do |config|
   config.include DvelpApiResponse::ApiRequestHelper, type: :controller
   config.use_transactional_fixtures = true
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
 
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true

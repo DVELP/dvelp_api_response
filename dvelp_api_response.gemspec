@@ -1,4 +1,3 @@
-# coding: utf-8
 # frozen_string_literal: true
 
 lib = File.expand_path('../lib', __FILE__)
@@ -29,20 +28,21 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'active_model_serializers'
   spec.add_dependency 'dvelp_api_auth'
   spec.add_dependency 'kaminari'
   spec.add_dependency 'rails'
-  spec.add_dependency 'active_model_serializers'
 
   spec.add_development_dependency 'bundler', '~> 1.14'
   spec.add_development_dependency 'byebug'
   spec.add_development_dependency 'combustion'
   spec.add_development_dependency 'database_cleaner'
-  spec.add_development_dependency 'factory_girl_rails'
+  spec.add_development_dependency 'factory_bot_rails'
   spec.add_development_dependency 'faker'
   spec.add_development_dependency 'rake', '~> 10.0'
-  spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'rspec', '~> 3.0'
+  spec.add_development_dependency 'rack-test', '0.7.0'
   spec.add_development_dependency 'rspec-rails'
+  spec.add_development_dependency 'rubocop', '0.48.1'
   spec.add_development_dependency 'sqlite3'
 end
