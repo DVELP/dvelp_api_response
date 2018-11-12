@@ -29,7 +29,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.add_dependency 'active_model_serializers'
-  spec.add_dependency 'dvelp_api_auth'
+  spec.add_dependency 'dvelp_api_auth', '0.5.0'
   spec.add_dependency 'kaminari'
   spec.add_dependency 'rails'
 
