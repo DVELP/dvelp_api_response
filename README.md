@@ -51,6 +51,7 @@ Add this code to the top of the base controller class
 require_dependency 'dvelp_api_response/handle_request'
 serialization_scope :view_context
 
+include ActionView::Helpers::TranslationHelper
 include DvelpApiResponse::HandleRequest
 include ::VersionController
 
