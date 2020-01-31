@@ -41,7 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'faker'
   spec.add_development_dependency 'rake', '~> 10.0'
   spec.add_development_dependency 'rspec', '~> 3.0'
-  spec.add_development_dependency 'rack-test', '0.7.0'
+  spec.add_development_dependency 'rack-test', '1.1.0'
   spec.add_development_dependency 'rspec-rails'
   spec.add_development_dependency 'rubocop', '0.48.1'
   spec.add_development_dependency 'sqlite3'
