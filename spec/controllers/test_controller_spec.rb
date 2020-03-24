@@ -254,12 +254,24 @@ RSpec.describe TestController, type: :controller do
             .to include(expected_error)
         end
       end
-      it_behaves_like 'renders error', 'error_in_json_brace', 'expected true () at'
-      it_behaves_like 'renders error', 'error_in_json_value', 'unexpected character (this[0].a) at'
-      it_behaves_like 'renders error', 'error_in_json_key', 'unexpected character (this[0].is) at'
-      it_behaves_like 'renders error', 'error_in_json_bracket', 'expected comma, not a hash close (this[1]) at'
-      it_behaves_like 'renders error', 'error_in_json_comma', 'expected hash key, not an array close (this[0]) at'
-      it_behaves_like 'renders error', 'error_in_json_comma_2', 'expected comma, not a string (this[0].is) at'
+      it_behaves_like 'renders error',
+                      'error_in_json_brace',
+                      'expected true () at'
+      it_behaves_like 'renders error',
+                      'error_in_json_value',
+                      'unexpected character (this[0].a) at'
+      it_behaves_like 'renders error',
+                      'error_in_json_key',
+                      'unexpected character (this[0].is) at'
+      it_behaves_like 'renders error',
+                      'error_in_json_bracket',
+                      'expected comma, not a hash close (this[1]) at'
+      it_behaves_like 'renders error',
+                      'error_in_json_comma',
+                      'expected hash key, not an array close (this[0]) at'
+      it_behaves_like 'renders error',
+                      'error_in_json_comma_2',
+                      'expected comma, not a string (this[0].is) at'
     end
 
     describe 'payment error handling' do

@@ -23,8 +23,9 @@ module DvelpApiResponse
       { 'errors' => [error_message] }
     end
 
-    def api_request(method, action, params: {}, payload: {}, media_type: :jsonapi)
-
+    def api_request(
+      method, action, params: {}, payload: {}, media_type: :jsonapi
+    )
       url_params =
         if %i[update show destroy].include? action
           { id: 1 }
