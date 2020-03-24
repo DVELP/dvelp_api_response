@@ -28,7 +28,7 @@ module DvelpApiResponse
           params
         else
           ActionController::Parameters.new(
-            JSON.parse(request.raw_post)
+            Oj.load(request.raw_post)
           )
         end
     end

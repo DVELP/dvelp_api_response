@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :test_record, class: TestRecord do
-    name Faker::Company.name
+    name { Faker::Company.name }
   end
 
   trait :with_child_records do

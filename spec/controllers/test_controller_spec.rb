@@ -50,8 +50,28 @@ RSpec.describe TestController, type: :controller do
         params.require(:missing)
       end
 
-      def error_json
-        JSON.parse('{this is not a JSON')
+      def error_in_json_brace
+        Oj.load('{this is not a JSON')
+      end
+
+      def error_in_json_value
+        Oj.load('{"this":[{"is":"not","a":json}]}')
+      end
+
+      def error_in_json_key
+        Oj.load('{"this":[{"is":"not",a:"json"}]}')
+      end
+
+      def error_in_json_bracket
+        Oj.load('{"this":[{"is":"not","a":"json"}}')
+      end
+
+      def error_in_json_comma
+        Oj.load('{"this":[{"is":"not","a":"json",]}}')
+      end
+
+      def error_in_json_comma_2
+        Oj.load('{"this":[{"is":"not""a":"json"]}}')
       end
 
       def error_payment
@@ -64,7 +84,12 @@ RSpec.describe TestController, type: :controller do
         resources :test do
           collection do
             get :error_destruction
-            get :error_json
+            get :error_in_json_brace
+            get :error_in_json_value
+            get :error_in_json_key
+            get :error_in_json_bracket
+            get :error_in_json_comma
+            get :error_in_json_comma_2
             get :error_missing_parameters
             get :error_not_found
             get :error_payment
@@ -216,16 +241,71 @@ RSpec.describe TestController, type: :controller do
       end
     end
 
-    describe 'JSON parsing error handling' do
-      it 'renders error' do
-        fill_auth_headers(fullpath: '/test/error_json.jsonapi')
+    describe 'OJ (optimised json) parsing error handling' do
+      it 'renders error for missing brace' do
+        fill_auth_headers(fullpath: '/test/error_in_json_brace.jsonapi')
 
-        api_request :get, :error_json
+        api_request :get, :error_in_json_brace
 
         expect(response).to have_http_status :bad_request
 
         expect(parsed_response['errors'][0]['body'])
-          .to include('unexpected token at')
+          .to include('expected true () at')
+      end
+
+      it 'renders error for badly formatted value' do
+        fill_auth_headers(fullpath: '/test/error_in_json_value.jsonapi')
+
+        api_request :get, :error_in_json_value
+
+        expect(response).to have_http_status :bad_request
+
+        expect(parsed_response['errors'][0]['body'])
+          .to include('unexpected character (this[0].a) at')
+      end
+
+      it 'renders error for badly formatted key' do
+        fill_auth_headers(fullpath: '/test/error_in_json_key.jsonapi')
+
+        api_request :get, :error_in_json_key
+
+        expect(response).to have_http_status :bad_request
+
+        expect(parsed_response['errors'][0]['body'])
+          .to include('unexpected character (this[0].is) at')
+      end
+
+      it 'renders error for missing bracket' do
+        fill_auth_headers(fullpath: '/test/error_in_json_bracket.jsonapi')
+
+        api_request :get, :error_in_json_bracket
+
+        expect(response).to have_http_status :bad_request
+
+        expect(parsed_response['errors'][0]['body'])
+          .to include('expected comma, not a hash close (this[1]) at')
+      end
+
+      it 'renders error for extra comma' do
+        fill_auth_headers(fullpath: '/test/error_in_json_comma.jsonapi')
+
+        api_request :get, :error_in_json_comma
+
+        expect(response).to have_http_status :bad_request
+
+        expect(parsed_response['errors'][0]['body'])
+          .to include('expected hash key, not an array close (this[0]) at')
+      end
+
+      it 'renders error for missing comma' do
+        fill_auth_headers(fullpath: '/test/error_in_json_comma_2.jsonapi')
+
+        api_request :get, :error_in_json_comma_2
+
+        expect(response).to have_http_status :bad_request
+
+        expect(parsed_response['errors'][0]['body'])
+          .to include('expected comma, not a string (this[0].is) at')
       end
     end
 

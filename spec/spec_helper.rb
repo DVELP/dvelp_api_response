@@ -9,9 +9,8 @@ $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'dvelp_api_response'
 
 require 'combustion'
-Combustion.initialize! :all
+Combustion.initialize! :active_record, :action_controller
 
-require 'active_model_serializers'
 require 'byebug'
 require 'database_cleaner'
 require 'dvelp_api_auth'

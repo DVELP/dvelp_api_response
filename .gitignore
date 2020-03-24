@@ -9,4 +9,5 @@
 /spec/internal/db/combustion_test.sqlite
 /spec/reports/
 /tmp/
-
+.tool-versions
+*.gem

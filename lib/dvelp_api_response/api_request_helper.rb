@@ -14,7 +14,7 @@ module DvelpApiResponse
     end
 
     def parsed_response
-      @parsed_response ||= JSON.parse(response.body)
+      @parsed_response ||= parse_body(response.body)
     end
 
     def response_error(body, meta = nil)
@@ -23,8 +23,7 @@ module DvelpApiResponse
       { 'errors' => [error_message] }
     end
 
-    def api_request(method, action, params: {},
-      payload: {}, media_type: :jsonapi)
+    def api_request(method, action, params: {}, payload: {}, media_type: :jsonapi)
 
       url_params =
         if %i[update show destroy].include? action
@@ -37,7 +36,7 @@ module DvelpApiResponse
 
       process_params = { method: method, params: url_params, as: media_type }
 
-      process_params[:body] = payload.to_json if payload.present?
+      process_params[:body] = jsonify_payload(payload) if payload.present?
 
       process(
         action,
@@ -62,6 +61,14 @@ module DvelpApiResponse
 
     def fill_accept(media_type)
       request.set_header 'HTTP_ACCEPT', Mime[media_type].to_s
+    end
+
+    def jsonify_payload(hash)
+      Oj.dump(hash, mode: :rails, time_format: :ruby)
+    end
+
+    def parse_body(json)
+      Oj.load(json)
     end
   end
 end

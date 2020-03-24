@@ -32,7 +32,7 @@ module DvelpApiResponse
       render_wrong_type_error
     rescue ActionController::ParameterMissing => e
       render_missing_parameter_error(e.param)
-    rescue JSON::ParserError => e
+    rescue Oj::ParseError, JSON::ParserError => e
       render_malformed_request_error(e)
     rescue PaymentAPIError => e
       render_payment_api_error(e)
