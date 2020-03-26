@@ -6,37 +6,42 @@ module DvelpApiResponse
 
     def initialize(*includes)
       @includes = includes.flatten.compact
+      partition_relations
     end
 
     def parsed_array
-      ([compacted_hashes] + base_level_includes).flatten
+      ([indirect_relations] + direct_relations).flatten
     end
 
     private
 
-    def compacted_hashes
-      nested_includes.group_by(&:keys).flat_map do |k, v|
+    attr_reader :direct_relations, :nested_relations
+
+    def indirect_relations
+      nested_relations.group_by(&:keys).flat_map do |k, v|
         { k.first => v.flat_map(&:values) }
       end
     end
 
-    def base_level_includes
-      formatted_array.reject { |a| a.is_a?(Hash) }
+    def partition_relations
+      @nested_relations, @direct_relations =
+        relations.partition { |relationship| relationship.is_a?(Hash) }
     end
 
-    def nested_includes
-      formatted_array.select { |a| a.is_a?(Hash) }
+    def relations
+      includes.map { |include_string| resolve_relations(include_string) }
     end
 
-    def formatted_array
-      @formatted_array ||= includes.map { |string| format_string(string) }
-    end
+    def resolve_relations(include_string)
+      return include_string unless include_string.include?('.')
 
-    def format_string(include_string)
-      array = include_string.split('.')
-      parent = array.shift
-      children = array.join('.')
-      !children.empty? ? { parent => format_string(children) } : parent
+      array = include_string.split('.').reverse
+      last_relation = array.shift
+
+      array.each do |relation|
+        last_relation = { relation => last_relation.clone }
+      end
+      last_relation
     end
   end
 end
