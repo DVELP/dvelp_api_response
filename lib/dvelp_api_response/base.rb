@@ -48,27 +48,20 @@ module DvelpApiResponse
     end
 
     def associated_objects
-      includes.map do |included_association|
-        include_parser = DvelpApiResponse::IncludeItemParser
-          .new(included_association)
-        associated_object = include_parser.object_name
+      return [] if includes.empty?
 
-        next unless valid_association?(associated_object)
-
-        nested_includes = include_parser.nested_includes
-
-        DvelpApiResponse::Distributor.new(
-          object.send(associated_object),
-          version,
-          nested_includes,
-          false
-        ).build_response
-      end.compact
+      associated_items.map do |association|
+        build_response(association)
+      end
     end
 
-    def valid_association?(associated_object)
-      object.respond_to?(associated_object) &&
-        object.send(associated_object).present?
+    def build_response(association)
+      DvelpApiResponse::Distributor.new(
+        object_with_relations.send(association.object_name),
+        version,
+        association.nested_includes,
+        false
+      ).build_response
     end
 
     def remove_duplicate_associated_keys
@@ -78,6 +71,17 @@ module DvelpApiResponse
 
     def versioned_hash
       {}
+    end
+
+    private
+
+    delegate :associated_items,
+             :object_with_relations,
+             to: :association_factory
+
+    def association_factory
+      @association_factory ||=
+        DvelpApiResponse::AssociationFactory.new(object, includes)
     end
   end
 end

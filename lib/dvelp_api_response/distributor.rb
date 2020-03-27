@@ -56,6 +56,9 @@ module DvelpApiResponse
     end
 
     def collection_response
+      # need to reduce the calls to the DB in the case of this method
+      # better to pass the object full populated here instead of relying
+      # on Base to pull out the relationships.
       resource.map do |object|
         api_response_class.new(
           object, version, parsed_includes, options: options

@@ -10,7 +10,7 @@ module DvelpApiResponse
     end
 
     def parsed_array
-      ([indirect_relations] + direct_relations).flatten
+      @parsed_array ||=([indirect_relations] + direct_relations).flatten
     end
 
     private
