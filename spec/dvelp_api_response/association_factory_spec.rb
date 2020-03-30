@@ -1,21 +1,41 @@
 # frozen_string_literal: true
 
 describe DvelpApiResponse::AssociationFactory do
-
-  # add model and factory for another type
-  # add a nested type so can test:
-  #   TestRecord has_many :child_records
-  #   ChildRecord has_many :toy_records
-  #   TestRecord has_many :toy_records
+  VERSION = 1
 
   describe '#associated_items' do
-    context 'with child records' do
-
-    end
-
     context 'with no child records' do
+      let(:object) { create(:test_record) }
+
+      it 'returns an empty array' do
+        includes = []
+        subject = described_class.new(object, includes)
+
+        expect(subject.associated_items).to eq []
+      end
+    end
+
+    context 'with a nested records' do
+      let(:object) { create(:test_record, :with_child_and_toys) }
+
+      it '' do
+        associates = ['toy_records', { 'child_records' => 'toy_records' }]
+        subject = described_class.new(object, associates)
+        expected = [
+          item_parser.new('toy_records'),
+          item_parser.new({ 'child_records' => 'toy_records' })
+        ]
+
+        expect(subject.associated_items.map(&:object_name))
+          .to eq expected.map(&:object_name)
+        expect(subject.associated_items.map(&:nested_includes))
+          .to eq expected.map(&:nested_includes)
+        expect(subject.associated_items.map(&:included_item))
+          .to eq expected.map(&:included_item)
+      end
 
     end
+
 
     context 'with nested toy_records includes' do
 
@@ -69,5 +89,9 @@ describe DvelpApiResponse::AssociationFactory do
         ).to eq(false)
       end
     end
+  end
+
+  def item_parser
+    DvelpApiResponse::IncludeItemParser
   end
 end

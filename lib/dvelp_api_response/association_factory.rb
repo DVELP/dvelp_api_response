@@ -1,12 +1,12 @@
 module DvelpApiResponse
   class AssociationFactory
-    def initialize(object, includes = [])
+    def initialize(object, associates = [])
       @object = object
-      @includes = includes
+      @associates = associates
     end
 
     def associated_items
-      @associated_items ||= includes.map do |association|
+      @associated_items ||= associates.map do |association|
         item = parse_item(association)
         next unless valid_association?(item.object_name)
         item
@@ -22,7 +22,7 @@ module DvelpApiResponse
 
     private
 
-    attr_reader :object, :includes
+    attr_reader :object, :associates
 
     def associations
       associated_items.map(&:included_item)
