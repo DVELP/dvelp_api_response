@@ -11,4 +11,10 @@ ActiveRecord::Schema.define do
     t.text   :content
     t.timestamps
   end
+
+  create_table(:toy_records, force: true) do |t|
+    t.belongs_to :test_record, null: true
+    t.belongs_to :child_record, null: true
+    t.string :name
+  end
 end

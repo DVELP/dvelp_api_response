@@ -18,7 +18,7 @@ module DvelpApiResponse
     end
 
     def nested_includes
-      included_item.is_a?(Hash) ? included_item[object_name] : []
+      @nested_includes ||= included_item.is_a?(Hash) ? included_item[object_name] : []
     end
   end
 end

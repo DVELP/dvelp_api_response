@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-
 RSpec.describe DvelpApiResponse::Base do
   VERSION = 1
 
@@ -102,36 +100,6 @@ RSpec.describe DvelpApiResponse::Base do
     end
   end
 
-  describe '#valid_association?(associated_object)' do
-    context 'association is valid' do
-      it 'returns true' do
-        test_record = create(:test_record, :with_child_records)
-        object = DvelpApiResponse::Base
-          .new(test_record, VERSION, ['child_records'])
-
-        expect(object.valid_association?(:child_records)).to eq(true)
-      end
-
-      context 'association is blank?' do
-        it 'returns false' do
-          test_record = create(:test_record)
-          object = DvelpApiResponse::Base.new(test_record, VERSION, [])
-
-          expect(object.valid_association?(:child_records)).to eq(false)
-        end
-      end
-    end
-
-    context 'association is invalid' do
-      it 'returns false' do
-        test_record = create(:test_record)
-        object = DvelpApiResponse::Base.new(test_record, VERSION, [])
-
-        expect(object.valid_association?(:invalid_association)).to eq(false)
-      end
-    end
-  end
-
   describe '#remove_duplicate_associated_keys' do
     it 'strips out any duplicate references' do
       test_record = create(:test_record)
@@ -144,6 +112,23 @@ RSpec.describe DvelpApiResponse::Base do
 
       expect(object.remove_duplicate_associated_keys)
         .to eq(test_record: test_record_hash)
+    end
+  end
+
+  describe '#build_response' do
+    it 'generates a hash for the nestedboject' do
+      test_record = create(:test_record, :with_child_records)
+
+      subject = DvelpApiResponse::Base.new(test_record, VERSION, ['child_records'])
+      child = subject.associated_items.first
+      child_name = test_record.child_records.first.name
+
+      child_record_hash = {
+        child_records: [{ id: 1, name: child_name }]
+      }
+
+      expect(subject.build_response(child))
+        .to eq(child_record_hash)
     end
   end
 end

@@ -18,7 +18,7 @@ RSpec.describe DvelpApiResponse::IncludeParser, type: :model do
     end
   end
 
-  describe '#compacted hashes' do
+  describe '#indirect_relations' do
     it 'compacts hashes with same key values' do
       nested_includes = ['brand.tiers', 'brand.venues.category']
 
@@ -29,49 +29,51 @@ RSpec.describe DvelpApiResponse::IncludeParser, type: :model do
                       { 'venues' => 'category' }] }
       ]
 
-      expect(object.send(:compacted_hashes)).to eq(expected_output)
+      expect(object.send(:indirect_relations)).to eq(expected_output)
     end
   end
 
-  describe '#base_level_includes' do
-    it 'returns an array without any hashes' do
-      includes = ['brand', 'venues.category']
+  describe "#partition_relations" do
+    context 'populating @direct_relations on initialize' do
+      it 'builds an array without any hashes' do
+        includes = ['brand', 'venues.category']
 
-      object = DvelpApiResponse::IncludeParser.new(includes)
+        object = DvelpApiResponse::IncludeParser.new(includes)
 
-      expect(object.send(:base_level_includes)).to eq(['brand'])
+        expect(object.send(:direct_relations)).to eq(['brand'])
+      end
+    end
+
+    context 'populating @nested_relations on initialize' do
+      it 'builds an array with only hashes' do
+        includes = ['brand', 'venues.category']
+
+        object = DvelpApiResponse::IncludeParser.new(includes)
+
+        expect(object.send(:nested_relations)).to eq(['venues' => 'category'])
+      end
     end
   end
 
-  describe '#nested_includes' do
-    it 'returns an array with only hashes' do
-      includes = ['brand', 'venues.category']
-
-      object = DvelpApiResponse::IncludeParser.new(includes)
-
-      expect(object.send(:nested_includes)).to eq(['venues' => 'category'])
-    end
-  end
-
-  describe '#formatted_array' do
+  describe '#relations' do
     it 'loops through the includes and parses them' do
       includes = ['brand', 'venues.category']
 
       object = DvelpApiResponse::IncludeParser.new(includes)
 
-      expect(object.send(:formatted_array).count).to eq 2
-      expect(object.send(:formatted_array).first).to be_a(String)
+      expect(object.send(:relations).count).to eq 2
+      expect(object.send(:relations).first).to be_a(String)
     end
   end
 
-  describe '#format_string(include_string)' do
+  describe '#resolve_relations(include_string)' do
     it 'turns strings into arrays and hashes' do
       includes = ['brand', 'venues.category']
       include_string = 'venues.category'
 
       object = DvelpApiResponse::IncludeParser.new(includes)
 
-      expect(object.send(:format_string, include_string))
+      expect(object.send(:resolve_relations, include_string))
         .to eq('venues' => 'category')
     end
   end
