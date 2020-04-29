@@ -50,7 +50,8 @@ module DvelpApiResponse
     def authenticate_request
       begin
         raise Unauthorized unless valid_request?
-      rescue
+      rescue => e
+        log_unknown_unauthorised_reason(e)
         raise Unauthorized
       end
       raise UnsupportedMediaType unless valid_request_media_type?
@@ -72,6 +73,12 @@ module DvelpApiResponse
           ActiveModelSerializers::Deserialization.jsonapi_parse(api_params)
         )
       end
+    end
+
+    def log_unknown_unauthorised_reason(err)
+      Rails.logger.debug "Error in validation: #{err.class}"
+      Rails.logger.debug "#{err.message}"
+      Rails.logger.debug "#{err.backtrace}"
     end
   end
 end
